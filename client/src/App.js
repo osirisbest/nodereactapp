@@ -9,6 +9,26 @@ class App extends Component {
     super()
     this.doNormalization=this.doNormalization.bind(this)
     this.randomCase=this.randomCase.bind(this)
+    this.initialState=this.initialState.bind(this)
+    this.load=this.load.bind(this)
+    this.save=this.save.bind(this)
+    this.redo=this.redo.bind(this)
+  }
+
+  initialState(){
+    this.setState({data:''})
+  }
+  save(){
+    alert('TODO')
+  }
+  load(){
+    this.callApi()
+      .then(res => this.setState({ data: res.data }))
+      .then(res=>console.log(res.data))
+      .catch(err => console.log(err));
+  }
+  redo(){
+    this.setState({data:this.state.dataBefor})
   }
 
   state = {
@@ -54,6 +74,7 @@ class App extends Component {
   }
 
   doNormalization(){
+    this.setState({dataBefor:this.state.data});
     let strNormalize=(str)=>{
       let strArr=[...str]
       let i=0
@@ -98,15 +119,42 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">This is react with gate to NodeJS Express</h1>
         </header> */}
-        <p className="App-intro">
-        { this.state.data }
+        <p>
+        currentdata:
         </p>
+        <h1 className="App-intro">
+         { this.state.data }
+        </h1>
 
+        <p>
+        dataBefor:
+        </p>
+        <h1 className="App-intro">
+         { this.state.dataBefor }
+        </h1>
+
+        <button onClick={this.initialState}>
+        Исходное состояние(пустое)
+        </button>
+        <br />        
         <button onClick={this.randomCase}>
         отобразить случайный вариант
         </button>
+        <br /> 
         <button onClick={this.doNormalization}>
         Нормализовать строки
+        </button>
+        <br /> 
+        <button onClick={this.redo}>
+        Исходное состояние(до нормализации)
+        </button>
+        <br /> 
+        <button onClick={this.save}>
+        Записать на сервер
+        </button>
+        <br /> 
+        <button onClick={this.load}>
+        Считать с сервера
         </button>
       </div>
       
