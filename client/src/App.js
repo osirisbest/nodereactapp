@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 
+
 class App extends Component {
   
   constructor (props){
@@ -32,7 +33,7 @@ class App extends Component {
   };
 
   randomCase(){
-    let outDim=new Array();
+    let outDim= [];
     let x=[...'abcdefghijklmnopqrstuvwxyz']
     let lines=parseInt(Math.random()*4+1)
     for (let i=0;i<lines;i++){
@@ -44,7 +45,7 @@ class App extends Component {
       outDim.push(string)
     }
     
-    this.setState({data:[outDim.join(',')]})
+    this.setState({data:outDim.join(',')})
     
     function getRandomLetter(){
         return x[parseInt(Math.random()*x.length)]
@@ -53,13 +54,40 @@ class App extends Component {
   }
 
   doNormalization(){
-    
+    let strNormalize=(str)=>{
+      let strArr=[...str]
+      let i=0
+      while (i<strArr.length){
+        if(strArr[i].length!==1) break //we moved all letter to the end
+        if(i+1===strArr.length) break //the last letter
+        if(!isVowel(strArr[i])&&isVowel(strArr[i+1])){
+          i+=2
+          continue;
+        } else if(isVowel(strArr[i])){
+           strArr.push(strArr.splice(i,1)[0]+'*')
+        } else if (!isVowel(strArr[i])&&!isVowel(strArr[i+1])){
+          strArr.push(strArr.splice(i,1)[0]+'*')
+        }
+      }
+      //prepare to return
+      strArr=strArr.map(
+        function(el){
+          return el[0]
+        }
+      )
+      let outStr=strArr.join('')+''
+
+      return outStr
+      }
     let data=(this.state.data+"").split(',')
-    let vowels = "aeiouy"
-    let isVowel=letter=>{return !(vowels.indexOf(letter))}
-    alert(isVowel('h'))
-    alert(isVowel('a'))
-    //alert(data)
+    
+    function isVowel(letter){
+      return Boolean("aeiouy".indexOf(letter)!==-1)
+    }
+    let newdata=data.map(
+      function (el){return strNormalize(el)}
+    )
+    this.setState({data: newdata.join(',')})
     
   }
 
