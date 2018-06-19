@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import './App.css';
 
 
@@ -19,7 +18,14 @@ class App extends Component {
     this.setState({data:''})
   }
   save(){
-    alert('TODO')
+    fetch('http://localhost:5000/api/putData', {
+      method: 'post',
+     // headers: {'Content-Type':'application/json'},
+     headers: {'Access-Control-Allow-Origin':'*'},
+      body: JSON.stringify({
+          data: this.state.data
+    })
+  });
   }
   load(){
     this.callApi()
@@ -43,7 +49,7 @@ class App extends Component {
   }
 
   callApi = async () => {
-    const response = await fetch('/api/hello');
+    const response = await fetch('/api/getData');
     console.log(response)
     const body = await response.json();
 
@@ -57,7 +63,7 @@ class App extends Component {
     let x=[...'abcdefghijklmnopqrstuvwxyz']
     let lines=parseInt(Math.random()*4+1)
     for (let i=0;i<lines;i++){
-      let length=parseInt(Math.random()*20+1)
+      let length=parseInt(Math.random()*10+1)
       let string='';
       for (let z=0;z<length;z++){
         string+=getRandomLetter();
@@ -122,14 +128,14 @@ class App extends Component {
         <p>
         currentdata:
         </p>
-        <h1 className="App-intro">
+        <h1 className="App-header">
          { this.state.data }
         </h1>
 
         <p>
         dataBefor:
         </p>
-        <h1 className="App-intro">
+        <h1 className="App-header">
          { this.state.dataBefor }
         </h1>
 
