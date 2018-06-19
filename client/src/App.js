@@ -17,19 +17,50 @@ class App extends Component {
   initialState(){
     this.setState({data:''})
   }
+   
   save(){
-    fetch('http://localhost:5000/api/putData', {
-      method: 'post',
-      headers: {'Content-Type':'application/json'},
-      body: {"first_name": this.refs.first_name.value}
-    // headers: {'Access-Control-Allow-Origin':'*'},
-    //   body: JSON.stringify({
-    //       data: this.state.data
-    // })
-  });
-  console.log(JSON.stringify({
-    data: this.state.data
-}))
+    (async () => {
+      const rawResponse = await fetch('http://localhost:5000/api/putData', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({data:this.state.data})
+      });
+      const content = await rawResponse.json();
+    
+      console.log(content);
+    })();
+//     fetch('http://localhost:5000/api/putData', 
+//     {
+//       headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json'
+//       },
+//       method: "POST",
+//       body: JSON.stringify({a: 1, b: 2})
+//   }
+//   //   {
+//   //     method: 'post',
+//   //     headers: {'Content-Type':'application/json'},
+//   //     body: 'foo=bar&lorem=ipsum'
+//   //   // headers: {'Access-Control-Allow-Origin':'*'},
+//   //   //   body: JSON.stringify({
+//   //   //       data: this.state.data
+//   //   // })
+//   // }
+// )
+//   .then(function (data) {  
+//     console.log('Request succeeded with JSON response', data);  
+//   })  
+//   .catch(function (error) {  
+//     console.log('Request failed', error);  
+//   });
+//   ;
+//   console.log(JSON.stringify({
+//     data: this.state.data
+// }))
   }
   load(){
     this.callApi()
@@ -119,30 +150,23 @@ class App extends Component {
       function (el){return strNormalize(el)}
     )
     this.setState({data: newdata.join(',')})
-    
-  }
+    }
 
   render() {
     return (
       <div className="App">
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">This is react with gate to NodeJS Express</h1>
-        </header> */}
         <p>
         currentdata:
         </p>
         <h1 className="App-header">
          { this.state.data }
         </h1>
-
         <p>
         dataBefor:
         </p>
         <h1 className="App-header">
          { this.state.dataBefor }
         </h1>
-
         <button onClick={this.initialState}>
         Исходное состояние(пустое)
         </button>
