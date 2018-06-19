@@ -26,7 +26,7 @@ app.post('/api/putData',urlencodedParser, function(req,res){
     
     // res.render('contact-success', {data: req.body});
     res.send(req.body);
-    console.log(req)
+    console.log(req.body)
     //console.log( JSON.parse(req.body));
     //if(!request.body) return response.sendStatus(400);
     //console.log(request.body);
