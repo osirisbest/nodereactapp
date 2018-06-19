@@ -3,13 +3,20 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+  
+  constructor (props){
+    super()
+    this.doNormalization=this.doNormalization.bind(this)
+  }
+
   state = {
-    response: ''
-  };
+    data: ''
+  }
+  
 
   componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ response: res.data }))
+      .then(res => this.setState({ data: res.data }))
       .then(res=>console.log(res.data))
       .catch(err => console.log(err));
   }
@@ -25,7 +32,8 @@ class App extends Component {
   };
 
   doNormalization(){
-    alert('Normalize!');
+    let data=this.state.data;
+    alert(data)
   }
 
   render() {
@@ -36,7 +44,7 @@ class App extends Component {
           <h1 className="App-title">This is react with gate to NodeJS Express</h1>
         </header> */}
         <p className="App-intro">
-        { this.state.response }
+        { this.state.data }
         </p>
         <button onClick={this.doNormalization}>
         Нормализовать строки
