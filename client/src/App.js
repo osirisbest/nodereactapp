@@ -85,7 +85,6 @@ class App extends Component {
 
   callApi = async () => {
     const response = await fetch('/api/getData');
-    console.log(response)
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
@@ -96,9 +95,9 @@ class App extends Component {
   randomCase(){
     let outDim= [];
     let x=[...'abcdefghijklmnopqrstuvwxyz']
-    let lines=parseInt(Math.random()*4+1)
+    let lines=parseInt(Math.random()*4+1,10)
     for (let i=0;i<lines;i++){
-      let length=parseInt(Math.random()*10+1)
+      let length=parseInt(Math.random()*10+1,10)
       let string='';
       for (let z=0;z<length;z++){
         string+=getRandomLetter();
@@ -109,7 +108,7 @@ class App extends Component {
     this.setState({data:outDim.join(',')})
     
     function getRandomLetter(){
-        return x[parseInt(Math.random()*x.length)]
+        return x[parseInt(Math.random()*x.length,10)]
     }
     
   }
