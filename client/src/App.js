@@ -20,12 +20,16 @@ class App extends Component {
   save(){
     fetch('http://localhost:5000/api/putData', {
       method: 'post',
-     // headers: {'Content-Type':'application/json'},
-     headers: {'Access-Control-Allow-Origin':'*'},
-      body: JSON.stringify({
-          data: this.state.data
-    })
+      headers: {'Content-Type':'application/json'},
+      body: {"first_name": this.refs.first_name.value}
+    // headers: {'Access-Control-Allow-Origin':'*'},
+    //   body: JSON.stringify({
+    //       data: this.state.data
+    // })
   });
+  console.log(JSON.stringify({
+    data: this.state.data
+}))
   }
   load(){
     this.callApi()
