@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { Button,ButtonGroup  } from 'reactstrap';
 
 class App extends Component {
   
@@ -32,35 +33,6 @@ class App extends Component {
     
       console.log(content);
     })();
-//     fetch('http://localhost:5000/api/putData', 
-//     {
-//       headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json'
-//       },
-//       method: "POST",
-//       body: JSON.stringify({a: 1, b: 2})
-//   }
-//   //   {
-//   //     method: 'post',
-//   //     headers: {'Content-Type':'application/json'},
-//   //     body: 'foo=bar&lorem=ipsum'
-//   //   // headers: {'Access-Control-Allow-Origin':'*'},
-//   //   //   body: JSON.stringify({
-//   //   //       data: this.state.data
-//   //   // })
-//   // }
-// )
-//   .then(function (data) {  
-//     console.log('Request succeeded with JSON response', data);  
-//   })  
-//   .catch(function (error) {  
-//     console.log('Request failed', error);  
-//   });
-//   ;
-//   console.log(JSON.stringify({
-//     data: this.state.data
-// }))
   }
   load(){
     this.callApi()
@@ -114,41 +86,59 @@ class App extends Component {
   }
 
   doNormalization(){
+    let dimForVowel=[];
     this.setState({dataBefor:this.state.data});
     let strNormalize=(str)=>{
+      
       let strArr=[...str]
       let i=0
       while (i<strArr.length){
-        if(strArr[i].length!==1) break //we moved all letter to the end
-        if(i+1===strArr.length) break //the last letter
+        if(strArr[i].length!==1) break //we moved all  to the end
+        if(i+1===strArr.length) break //the last
         if(!isVowel(strArr[i])&&isVowel(strArr[i+1])){
           i+=2
           continue;
         } else if(isVowel(strArr[i])){
-           strArr.push(strArr.splice(i,1)[0]+'*')
-        } else if (!isVowel(strArr[i])&&!isVowel(strArr[i+1])){
-          strArr.push(strArr.splice(i,1)[0]+'*')
-        }
+          
+          dimForVowel.push(strArr.splice(i,1)[0])
+          console.log(dimForVowel)
+        } else if (!isVowel(strArr[i])&&!isVowel(strArr[i+1])){ 
+           strArr.push(strArr.splice(i,1)[0]+'*')        }
       }
       //prepare to return
+      //
       strArr=strArr.map(
         function(el){
           return el[0]
         }
       )
-      let outStr=strArr.join('')+''
-
-      return outStr
+      
+      return strArr.join('')
       }
     let data=(this.state.data+"").split(',')
     
     function isVowel(letter){
       return Boolean("aeiouy".indexOf(letter)!==-1)
     }
-    let newdata=data.map(
-      function (el){return strNormalize(el)}
-    )
-    this.setState({data: newdata.join(',')})
+    for (let i=0;i<data.length;i++){
+      data[i]=strNormalize(data[i])
+      if (dimForVowel.length>0){
+        if (i+1!=data.length){
+          data[i+1]=data[i+1]+dimForVowel.join('')
+          dimForVowel=[]
+        }else{
+          data[i]=data[i+1]+dimForVowel.join('')
+          dimForVowel=[]
+        }
+
+      }
+    }
+    // let newdata=data.map(
+    //   function (el){
+    //     if (dimForVowel.length>0){}
+    //     return strNormalize(el)}
+    // )
+    this.setState({data: data.join(',')})
     }
 
   render() {
@@ -166,29 +156,31 @@ class App extends Component {
         <h1 className="App-header">
          { this.state.dataBefor }
         </h1>
-        <button onClick={this.initialState}>
+        <ButtonGroup vertical color="primary" size="lg">
+        <Button onClick={this.initialState} color="primary"  >
         Исходное состояние(пустое)
-        </button>
+        </Button>
         <br />        
-        <button onClick={this.randomCase}>
+        <Button onClick={this.randomCase} color="success"   >
         отобразить случайный вариант
-        </button>
+        </Button>
         <br /> 
-        <button onClick={this.doNormalization}>
+        <Button onClick={this.doNormalization} color="success"  >
         Нормализовать строки
-        </button>
+        </Button>
         <br /> 
-        <button onClick={this.redo}>
+        <Button onClick={this.redo}  color="primary" >
         Исходное состояние(до нормализации)
-        </button>
+        </Button>
         <br /> 
-        <button onClick={this.save}>
+        <Button onClick={this.save}  color="info">
         Записать на сервер
-        </button>
+        </Button>
         <br /> 
-        <button onClick={this.load}>
+        <Button onClick={this.load}  color="info">
         Считать с сервера
-        </button>
+        </Button>
+        </ButtonGroup> 
       </div>
       
     );
